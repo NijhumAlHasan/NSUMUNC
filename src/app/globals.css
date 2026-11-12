@@ -1,26 +1,505 @@
 @import "tailwindcss";
 
+/* ── Design Tokens (Same Navy / UN-Blue / Gold Palette, Higher Text Legibility) ── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --navy:           #03060f;   /* near-black deep space */
+  --navy-mid:       #070d1d;
+  --navy-surface:   #0c1428;   /* card surfaces */
+  --navy-elevated:  #111d35;   /* hover / elevated cards */
+  --un-blue:        #0ea5e9;
+  --un-blue-bright: #38bdf8;
+  --un-blue-dim:    #0369a1;
+  --gold:           #d4a017;
+  --gold-bright:    #fbbf24;
+  --gold-dim:       #b88e22;
+  --text-base:      #f8faff;   /* crisp high-contrast white */
+  --text-muted:     #c4d3f2;   /* high-readability secondary copy */
+  --text-faint:     #8ea3cc;   /* clearly legible metadata & labels */
+  --border-subtle:  rgba(255,255,255,0.09);
+  --border-medium:  rgba(255,255,255,0.16);
+  --border-bright:  rgba(255,255,255,0.28);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-navy:           var(--navy);
+  --color-navy-mid:       var(--navy-mid);
+  --color-navy-surface:   var(--navy-surface);
+  --color-navy-elevated:  var(--navy-elevated);
+  --color-un-blue:        var(--un-blue);
+  --color-un-blue-bright: var(--un-blue-bright);
+  --color-un-blue-dim:    var(--un-blue-dim);
+  --color-gold:           var(--gold);
+  --color-gold-bright:    var(--gold-bright);
+  --color-gold-dim:       var(--gold-dim);
   --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ── Base ── */
+html {
+  scroll-behavior: smooth;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+  overflow-x: hidden;
+  width: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--navy);
+  color: var(--text-base);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  line-height: 1.65;
+  overflow-x: hidden;
+  width: 100%;
+  position: relative;
+}
+
+p {
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--navy); }
+::-webkit-scrollbar-thumb { background: var(--un-blue-dim); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--un-blue); }
+
+/* ────────────────────────────────────────────
+   iOS LIQUID GLASS  —  darker, higher contrast
+   Uses navy surface as base so glass reads
+   against the near-black page bg
+   ──────────────────────────────────────────── */
+
+/* Default glass — medium-dark frosted panel */
+.glass {
+  background: rgba(12, 20, 40, 0.84);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  border: 1px solid var(--border-medium);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255,255,255,0.10);
+}
+
+/* Gold-tinted glass */
+.glass-gold {
+  background: rgba(20, 15, 5, 0.86);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(212, 160, 23, 0.28);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(212,160,23,0.10),
+    inset 0 1px 0 rgba(212,160,23,0.15);
+}
+
+/* Blue-tinted glass */
+.glass-blue {
+  background: rgba(5, 16, 32, 0.86);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(14, 165, 233, 0.28);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(14,165,233,0.10),
+    inset 0 1px 0 rgba(14,165,233,0.14);
+}
+
+/* Deepest glass — navbar + overlays */
+.glass-dark {
+  background: rgba(3, 6, 15, 0.92);
+  backdrop-filter: blur(32px) saturate(160%);
+  -webkit-backdrop-filter: blur(32px) saturate(160%);
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.8);
+}
+
+/* ── Gradient text ── */
+.gradient-text {
+  background: linear-gradient(135deg, var(--un-blue-bright) 0%, var(--gold-bright) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.gradient-text-gold {
+  background: linear-gradient(135deg, var(--gold) 0%, var(--gold-bright) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Striver Digital Editorial & Outline Typography ── */
+.striver-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: lowercase;
+  color: var(--gold-bright);
+}
+.striver-tag::before { content: "("; color: var(--un-blue-bright); font-weight: 700; }
+.striver-tag::after  { content: ")"; color: var(--un-blue-bright); font-weight: 700; }
+
+.outline-text {
+  color: rgba(248, 250, 255, 0.14);
+  -webkit-text-stroke: 1.5px rgba(56, 189, 248, 0.55);
+  transition: color 0.35s ease, -webkit-text-stroke-color 0.35s ease, text-shadow 0.35s ease;
+}
+.outline-text:hover,
+.group:hover .outline-text {
+  color: var(--text-base);
+  -webkit-text-stroke-color: var(--un-blue-bright);
+  text-shadow: 0 0 28px rgba(14, 165, 233, 0.35);
+}
+
+.outline-text-gold {
+  color: rgba(251, 191, 36, 0.14);
+  -webkit-text-stroke: 1.5px rgba(251, 191, 36, 0.55);
+  transition: color 0.35s ease, -webkit-text-stroke-color 0.35s ease;
+}
+.outline-text-gold:hover,
+.group:hover .outline-text-gold {
+  color: var(--gold-bright);
+  -webkit-text-stroke-color: var(--gold-bright);
+}
+
+/* Giant watermark index (001, 002...) — subtle so foreground copy stays 100% readable */
+.watermark-num {
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 0.85;
+  color: rgba(255, 255, 255, 0.045);
+  -webkit-text-stroke: 1px rgba(56, 189, 248, 0.12);
+  user-select: none;
+  pointer-events: none;
+  transition: color 0.4s ease, -webkit-text-stroke-color 0.4s ease, transform 0.4s ease;
+}
+.group:hover .watermark-num {
+  color: rgba(14, 165, 233, 0.09);
+  -webkit-text-stroke-color: rgba(251, 191, 36, 0.28);
+  transform: translateY(-4px) scale(1.03);
+}
+
+/* ── Page section backgrounds ── */
+.mesh-bg {
+  background:
+    radial-gradient(ellipse 90% 70% at 15% 5%,  rgba(14,165,233,0.12) 0%, transparent 55%),
+    radial-gradient(ellipse 70% 60% at 85% 90%, rgba(212,160,23,0.10) 0%, transparent 50%),
+    var(--navy);
+}
+
+.section-dark {
+  background: var(--navy-mid);
+}
+.section-surface {
+  background: var(--navy-surface);
+}
+
+/* Architectural subtle grid overlay (Striver Digital agency grid lines) */
+.agency-grid-bg {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 72px 72px;
+}
+
+/* ── Text utilities ── */
+.text-readable       { color: var(--text-base); }
+.text-secondary-copy { color: var(--text-muted); }
+.text-meta           { color: var(--text-faint); }
+
+/* ── Animations ── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-10px); }
+}
+@keyframes pulse-ring {
+  0%   { box-shadow: 0 0 0 0   rgba(14,165,233,0.5); }
+  70%  { box-shadow: 0 0 0 18px rgba(14,165,233,0); }
+  100% { box-shadow: 0 0 0 0   rgba(14,165,233,0); }
+}
+@keyframes rotate-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes rotate-reverse-slow {
+  from { transform: rotate(360deg); }
+  to   { transform: rotate(0deg); }
+}
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+@keyframes border-beam {
+  0%, 100% { border-color: rgba(14, 165, 233, 0.25); }
+  50%      { border-color: rgba(251, 191, 36, 0.45); }
+}
+
+.animate-fade-in-up          { animation: fadeInUp   0.7s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.animate-fade-in-down        { animation: fadeInDown 0.5s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.animate-float               { animation: float  6s ease-in-out infinite; }
+.animate-pulse-ring          { animation: pulse-ring 2.5s ease-in-out infinite; }
+.animate-rotate-slow         { animation: rotate-slow 32s linear infinite; }
+.animate-rotate-reverse-slow { animation: rotate-reverse-slow 26s linear infinite; }
+.animate-border-beam         { animation: border-beam 4s ease-in-out infinite; }
+
+.stagger-1 { animation-delay: 0.10s; }
+.stagger-2 { animation-delay: 0.20s; }
+.stagger-3 { animation-delay: 0.30s; }
+.stagger-4 { animation-delay: 0.40s; }
+.stagger-5 { animation-delay: 0.50s; }
+.stagger-6 { animation-delay: 0.60s; }
+
+/* ── Card hover (Striver smooth spring elevation + glow border) ── */
+.card-hover {
+  transition:
+    transform 0.36s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.36s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.36s ease;
+}
+.card-hover:hover {
+  transform: translateY(-6px) scale(1.006);
+  border-color: rgba(56, 189, 248, 0.35);
+  box-shadow:
+    0 24px 64px rgba(0,0,0,0.75),
+    0 0 28px rgba(14,165,233,0.12),
+    0 0 0 1px rgba(255,255,255,0.12);
+}
+
+/* ── Arrow icon diagonal hover animation (wgl has-icon_size_animation) ── */
+.striver-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.35s ease;
+}
+.group:hover .striver-arrow,
+.striver-arrow:hover {
+  transform: translate(3px, -3px) rotate(45deg) scale(1.08);
+}
+
+/* ── Divider ── */
+.divider-glow {
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(14,165,233,0.45) 30%,
+    rgba(212,160,23,0.45) 70%,
+    transparent 100%);
+}
+
+/* ── Form inputs — readable on dark bg ── */
+.input-glass {
+  background: rgba(3, 6, 15, 0.78);
+  border: 1px solid var(--border-medium);
+  color: var(--text-base);
+  border-radius: 0.75rem;
+  padding: 0.8rem 1rem;
+  font-size: 0.925rem;
+  width: 100%;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.input-glass::placeholder { color: var(--text-faint); }
+.input-glass:focus {
+  border-color: rgba(56,189,248,0.65);
+  box-shadow: 0 0 0 3px rgba(14,165,233,0.15);
+}
+
+/* ── Badge pill ── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.3rem 0.95rem;
+  border-radius: 9999px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ── Mobile-specific tweaks ── */
+* { touch-action: manipulation; }
+
+@media (max-width: 640px) {
+  a, button { min-height: 44px; }
+  h1 { font-size: clamp(2.25rem, 10vw, 4rem); }
+  h2 { font-size: clamp(1.65rem, 7vw, 2.5rem); }
+
+  .glass, .glass-gold, .glass-blue, .glass-dark {
+    border-radius: 1rem;
+  }
+
+  button:active, a:active {
+    opacity: 0.85;
+    transform: scale(0.98);
+  }
+}
+
+@supports (padding: max(0px)) {
+  nav {
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
+  }
+  footer {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+}
+
+html, body { max-width: 100vw; overflow-x: hidden; }
+
+@media (hover: none) {
+  .card-hover:hover {
+    transform: none;
+    box-shadow: none;
+  }
+}
+
+select {
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='rgba(196,211,242,0.9)' stroke-width='1.5'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1.2em;
+  padding-right: 2.5rem;
+}
+
+/* ── Tactile Film Grain & Depth Overlay ── */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.028;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* ── Gold Shimmer Text Animation ── */
+@keyframes shimmer-gold-flow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.shimmer-gold-text {
+  background: linear-gradient(
+    90deg,
+    #d4a017 0%,
+    #fbbf24 25%,
+    #ffffff 50%,
+    #fbbf24 75%,
+    #d4a017 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer-gold-flow 6s ease-in-out infinite;
+}
+
+/* ── Celestial Section Divider ── */
+.celestial-divider {
+  position: relative;
+  height: 1px;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(14, 165, 233, 0.3) 30%,
+    rgba(251, 191, 36, 0.7) 50%,
+    rgba(14, 165, 233, 0.3) 70%,
+    transparent 100%
+  );
+}
+.celestial-divider::after {
+  content: "✦";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--gold-bright);
+  font-size: 11px;
+  background: var(--navy);
+  padding: 0 10px;
+  box-shadow: 0 0 16px rgba(251, 191, 36, 0.6);
+}
+
+/* ── Category Filter Pills ── */
+.filter-pill {
+  padding: 0.5rem 1.15rem;
+  border-radius: 9999px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-muted);
+}
+.filter-pill:hover {
+  color: white;
+  border-color: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.08);
+}
+.filter-pill.active {
+  background: var(--un-blue);
+  color: white;
+  border-color: var(--un-blue-bright);
+  box-shadow: 0 4px 18px rgba(14, 165, 233, 0.35);
+}
+
+@media (max-width: 480px) {
+  .columns-1 { columns: 1 !important; }
+}
+
+/* ────────────────────────────────────────────
+   MOBILE OPTIMIZATIONS (iOS & Android)
+   ──────────────────────────────────────────── */
+
+/* Prevent iOS Safari auto-zoom on input focus */
+@media (max-width: 640px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}
+
+/* Safe area insets for notched iPhones and gesture home bars */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+.pt-safe {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+/* Improved tap highlight on mobile devices */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Ensure images never overflow mobile container */
+img, svg, video, canvas {
+  max-width: 100%;
+  height: auto;
 }
