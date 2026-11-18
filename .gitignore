@@ -25,14 +25,22 @@
 *.pem
 cookies.txt
 
+# database (sensitive data, passwords & subscriber messages)
+/data/*.db
+/data/*.db-journal
+/data/*.db-wal
+/data/*.db-shm
+/data/*.sqlite*
+
 # debug
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
+# env files (hide secrets, keep example template)
 .env*
+!.env.example
 
 # vercel
 .vercel
